@@ -1,10 +1,13 @@
 package com.swu.perfuinder.domain;
 
+import com.swu.perfuinder.domain.common.BaseEntity;
 import com.swu.perfuinder.domain.enums.Brand;
 import com.swu.perfuinder.domain.enums.Gender;
 import com.swu.perfuinder.domain.enums.Season;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -12,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-//@Getter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Perfume {
+public class Perfume extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,9 +49,6 @@ public class Perfume {
     @Column(columnDefinition = "TEXT")
     private String baseDesc;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
     // 연관관계 추가
     @OneToMany(mappedBy = "perfume", cascade = CascadeType.ALL)
     private List<Volume> volumes = new ArrayList<>();
@@ -64,4 +64,44 @@ public class Perfume {
 
     @OneToMany(mappedBy = "perfume", cascade = CascadeType.ALL)
     private List<Favorite> favorites = new ArrayList<>();
+
+    // 연관관계 편의 메서드들 추가
+    public void addVolume(Volume volume) {
+        volumes.add(volume);
+        volume.setPerfume(this);
+    }
+
+    public void addNote(Note note) {
+        notes.add(note);
+        note.setPerfume(this);
+    }
+
+    public void addKeyword(Keyword keyword) {
+        keywords.add(keyword);
+        keyword.setPerfume(this);
+    }
+
+    public void addCelebrity(Celebrity celebrity) {
+        celebrities.add(celebrity);
+        celebrity.setPerfume(this);
+    }
+
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
+        favorite.setPerfume(this);
+    }
+
+    @Builder
+    public Perfume(Brand brand, String name, String description, String imageUrl,
+                   Gender gender, Season season, String topDesc, String middleDesc, String baseDesc) {
+        this.brand = brand;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.gender = gender;
+        this.season = season;
+        this.topDesc = topDesc;
+        this.middleDesc = middleDesc;
+        this.baseDesc = baseDesc;
+    }
 }
