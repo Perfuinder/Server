@@ -18,14 +18,6 @@ public class ApiResponse<T> {
     private T data;
 
     // 성공 응답 생성 메서드들
-    public static <T> ApiResponse<T> success(T data) {
-        return ApiResponse.<T>builder()
-                .status(200)
-                .message("SUCCESS")
-                .data(data)
-                .build();
-    }
-
     public static <T> ApiResponse<T> success(String message, T data) {
         return ApiResponse.<T>builder()
                 .status(200)
