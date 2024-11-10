@@ -1,4 +1,4 @@
-package com.swu.perfuinder.dto.common;
+package com.swu.perfuinder.apiPayload;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

@@ -121,7 +121,7 @@ public class PerfumeResponse {
            }
        ]
        """)
-        private List<VolumeResponse> volumes;
+        private List<VolumeResponse.VolumeInfo> volumes;
 
         @Schema(description = "메인 노트 목록", example = """
         [
@@ -274,7 +274,7 @@ public class PerfumeResponse {
            }
        ]
        """)
-        private List<VolumeResponse> volumes;
+        private List<VolumeResponse.VolumeInfo> volumes;
 
         @Schema(description = "메인 노트 리스트", example = """
         [
@@ -316,7 +316,7 @@ public class PerfumeResponse {
             }
         ]
         """)
-        private List<KeywordResponse> keywords;
+        private List<KeywordResponse.KeywordInfo> keywords;
 
     }
 
@@ -404,7 +404,7 @@ public class PerfumeResponse {
            }
        ]
        """)
-        private List<VolumeResponse> volumes;
+        private List<VolumeResponse.VolumeInfo> volumes;
     }
 
     @Getter
@@ -439,6 +439,6 @@ public class PerfumeResponse {
             }
         ]
         """)
-        private List<KeywordResponse> keywords;
+        private List<KeywordResponse.KeywordInfo> keywords;
     }
 }
