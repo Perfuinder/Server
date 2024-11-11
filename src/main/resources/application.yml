@@ -16,6 +16,9 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+google:
+  gemini:
+    api-key: ${GEMINI_API_KEY}
 
 springdoc:
   swagger-ui:

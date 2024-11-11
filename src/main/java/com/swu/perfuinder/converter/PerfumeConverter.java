@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PerfumeConverter {
 
+    private final NoteConverter noteConverter;
+
+    // 랜덤 계절 향수 정보 DTO로
     public PerfumeResponse.RandomSeasonPerfumeInfo toRandomSeasonPerfumeInfo(Perfume perfume) {
         return PerfumeResponse.RandomSeasonPerfumeInfo.builder()
                 .id(perfume.getId())
@@ -19,12 +22,25 @@ public class PerfumeConverter {
                 .build();
     }
 
+    // 랜덤 브랜드 향수 정보 DTO로
     public PerfumeResponse.RandomBrandPerfumeInfo toRandomBrandPerfumeInfo(Perfume perfume) {
         return PerfumeResponse.RandomBrandPerfumeInfo.builder()
                 .id(perfume.getId())
                 .name(perfume.getName())
                 .description(perfume.getDescription())
                 .imageUrl(perfume.getImageUrl())
+                .build();
+    }
+
+    // Gemini 향수 5종 추천(탐색) DTO로
+    public PerfumeResponse.GeminiPerfume toGeminiPerfumeResponse(Perfume perfume, boolean isFavorite) {
+        return PerfumeResponse.GeminiPerfume.builder()
+                .id(perfume.getId())
+                .brand(perfume.getBrand())
+                .imageUrl(perfume.getImageUrl())
+                .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
+                .description(perfume.getDescription())
+                .isFavorite(isFavorite)
                 .build();
     }
 }

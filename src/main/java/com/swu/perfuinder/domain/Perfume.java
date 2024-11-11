@@ -23,6 +23,7 @@ public class Perfume extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 100)
     private Brand brand;
 
     @Column(length = 100)
