@@ -22,7 +22,8 @@ public enum ErrorCode {
     NO_RECOMMENDED_PERFUME(404, "P008", "추천된 향수가 없습니다."),
     INVALID_BRAND_NAME(400, "P009", "존재하지 않는 브랜드입니다."),
     // gemini
-    GEMINI_API_ERROR(500, "G001", "Gemini API 호출 중 오류가 발생했습니다.");
+    GEMINI_API_ERROR(500, "G001", "Gemini API 호출 중 오류가 발생했습니다."),
+    IMAGE_NOT_FOUND(500, "G002", "이미지에서 키워드를 추출할 수 없습니다.");
 
     private final int status;
     private final String code;

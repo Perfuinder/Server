@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.swu.perfuinder.dto.perfume.PerfumeRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class GeminiClient {
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
+    // 추천 향수 5종
     public String getRecommendation(PerfumeRequest.GeminiPerfume request) {
         try {
             String prompt = buildPrompt(request);
@@ -60,6 +62,7 @@ public class GeminiClient {
         }
     }
 
+    // 추천 향수 5종 프롬프트 systemInstruction 및 정보 등등
     private String buildPrompt(PerfumeRequest.GeminiPerfume request) {
         String systemInstruction = """
     You are a perfume recommendation expert.
@@ -223,5 +226,78 @@ public class GeminiClient {
             case 6 -> String.format("%d원-%d원", customMinPrice, customMaxPrice);
             default -> throw new CustomException(ErrorCode.INVALID_PRICE_RANGE_CODE);
         };
+    }
+
+    public List<String> extractKeywords(byte[] imageBytes) {
+        try {
+            String prompt = buildImagePrompt(imageBytes);
+
+            String jsonRequest = createRequestBody(prompt);
+            log.info("Gemini API Request Body: {}", jsonRequest);
+
+            String response = webClient.post()
+                    .uri(GEMINI_API_URL + "?key=" + geminiConfig.getApiKey())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .bodyValue(jsonRequest)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+            log.info("Gemini API Response: {}", response);
+            return parseKeywordsFromResponse(response);
+
+        } catch (Exception e) {
+            log.error("Gemini API 호출 중 오류 발생", e);
+            throw new CustomException(ErrorCode.GEMINI_API_ERROR);
+        }
+    }
+
+    // 이미지 키워드 추출 프롬프트 systemInstruction 및 정보 등등
+    private String buildImagePrompt(byte[] imageBytes) {
+        String systemInstruction = """
+            You are an expert in analyzing images and extracting relevant keywords for perfume recommendations.
+            Please follow the conditions below strictly:
+            - Extract at least 5 keywords that best describe the given image, focusing on perfume-related attributes
+            - Each keyword should be in Korean and separated by a comma
+            - Use keywords similar to the following examples: 자연적, 우아한, 달콤한, 관능적, 신선한, 시원한, 부드러운
+            - Do NOT use any other format or text
+            - Example format: keyword1, keyword2, keyword3, keyword4, keyword5
+            """;
+
+        return systemInstruction + "\n" + "<image_data>" + new String(imageBytes) + "</image_data>";
+    }
+
+    // 응답 결과 파싱하기
+    private List<String> parseKeywordsFromResponse(String response) {
+        try {
+            JsonNode root = objectMapper.readTree(response);
+            String keywordsText = root.path("candidates")
+                    .path(0)
+                    .path("content")
+                    .path("parts")
+                    .path(0)
+                    .path("text")
+                    .asText();
+
+            String[] keywordsArray = keywordsText.split(",");
+            List<String> keywordsList = new ArrayList<>();
+
+            for (String keyword : keywordsArray) {
+                String trimmedKeyword = keyword.trim();
+                if (!trimmedKeyword.isEmpty()) {
+                    keywordsList.add(trimmedKeyword);
+                }
+            }
+
+            if (keywordsList.isEmpty()) {
+                throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+            }
+
+            return keywordsList;
+        } catch (JsonProcessingException e) {
+            log.error("Gemini API 응답 파싱 중 오류 발생", e);
+            throw new CustomException(ErrorCode.GEMINI_API_ERROR);
+        }
     }
 }

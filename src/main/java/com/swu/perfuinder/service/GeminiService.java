@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class GeminiService {
     private final PerfumeConverter perfumeConverter;
     private final FavoriteRepository favoriteRepository;
 
+    // 추천 향수 5종
     public List<PerfumeResponse.GeminiPerfume> getGeminiRecommendations(
             PerfumeRequest.GeminiPerfume request,
             String deviceId
@@ -68,7 +70,7 @@ public class GeminiService {
             default -> throw new CustomException(ErrorCode.INVALID_BRAND_NAME);
         };
     }
-    // 파싱 방식 수정
+    // 응답 결과 파싱
     private List<Perfume> parseAndFindPerfumes(String recommendation) {
         List<Perfume> results = new ArrayList<>();
         String[] lines = recommendation.split("\n\n", 2);
@@ -136,8 +138,21 @@ public class GeminiService {
         }
     }
 
+    // 용량별 가격 정보 확인
     private boolean hasVolumeInPriceRange(Perfume perfume, int minPrice, int maxPrice) {
         return perfume.getVolumes().stream()
                 .anyMatch(volume -> volume.getPrice() >= minPrice && volume.getPrice() <= maxPrice);
+    }
+
+    // 이미지 키워드 추출
+    public List<String> extractKeywordsFromImage(MultipartFile imageFile)  {
+        try {
+            // 이미지 파일을 Gemini API에 전송하고 키워드 추출
+            byte[] imageBytes = imageFile.getBytes();
+            return geminiClient.extractKeywords(imageBytes);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+        }
+
     }
 }

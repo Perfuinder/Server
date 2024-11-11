@@ -1,6 +1,8 @@
 package com.swu.perfuinder.controller;
 
 import com.swu.perfuinder.apiPayload.ApiResponse;
+import com.swu.perfuinder.config.exception.CustomException;
+import com.swu.perfuinder.config.exception.ErrorCode;
 import com.swu.perfuinder.dto.perfume.PerfumeRequest;
 import com.swu.perfuinder.dto.perfume.PerfumeResponse;
 import com.swu.perfuinder.service.GeminiService;
@@ -8,8 +10,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,5 +35,17 @@ public class GeminiController {
         List<PerfumeResponse.GeminiPerfume> recommendations =
                 geminiService.getGeminiRecommendations(request, deviceId);
         return ApiResponse.success("향수 추천 성공", recommendations);
+    }
+
+    @PostMapping(value = "/image/keyword", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Gemini 이미지 키워드 추출 API", description = "이미지의 키워드를 추출합니다.")
+    public List<String> extractKeywordsFromImage(@RequestParam("image") MultipartFile imageFile)  {
+        List<String> keywords = new ArrayList<>();
+        try {
+            keywords = geminiService.extractKeywordsFromImage(imageFile);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+        }
+        return keywords;
     }
 }
