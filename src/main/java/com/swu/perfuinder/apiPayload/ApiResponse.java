@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@Schema(title = "API 공통 응답")
+//@Schema(title = "API 공통 응답")
 public class ApiResponse<T> {
     @Schema(description = "상태 코드", example = "200")
     private int status;

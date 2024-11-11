@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Volume {
-    v_10, V_30, V_50, V_75, V_100
+    V_10, V_30, V_50, V_75, V_100
 }

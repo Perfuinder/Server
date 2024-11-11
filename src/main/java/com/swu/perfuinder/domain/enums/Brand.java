@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Brand {
-    DIPTYQUE, JO_MALONE, BYREDO, FORMENT
+    DIPTYQUE, JOMALONE, BYREDO, FORMENT
 }
