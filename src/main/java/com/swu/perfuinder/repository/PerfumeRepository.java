@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface PerfumeRepository extends JpaRepository<Perfume, Long> {
+
     // Native Query 사용
     @Query(value = "SELECT * FROM perfume p WHERE p.season = :season ORDER BY RAND() LIMIT :limit", nativeQuery = true)
     List<Perfume> findRandomBySeason(@Param("season") String season, @Param("limit") int limit);
