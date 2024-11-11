@@ -63,12 +63,15 @@ public class GeminiClient {
     private String buildPrompt(PerfumeRequest.GeminiPerfume request) {
         String systemInstruction = """
     You are a perfume recommendation expert.
-    Please follow the conditions below:
-    - answer in korean
-    - recommend 5 products that best match the input condition
-    - For each recommendation, use exactly this format:
-      brand: [브랜드명], name: [향수명]
-    - You must recommend perfume only from the provided list
+    Please follow the conditions below strictly:
+    - recommend exactly 5 perfumes that best match the input condition
+    - use EXACTLY this format for each recommendation (including colon and comma):
+      [number]. brand: [브랜드명], name: [향수명]
+    - do NOT use any other format or text
+    - each recommendation MUST be in a single line
+    - use these exact brand names: 딥티크, 조말론, 포맨트, 바이레도
+    - example format:
+      1. brand: 딥티크, name: 오 드 퍼퓸 탐 다오
     """;
 
         String perfumeList = """
