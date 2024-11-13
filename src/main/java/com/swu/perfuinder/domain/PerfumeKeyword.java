@@ -1,6 +1,7 @@
 package com.swu.perfuinder.domain;
 
 import com.swu.perfuinder.domain.common.BaseEntity;
+import com.swu.perfuinder.domain.enums.KeywordEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Keyword extends BaseEntity {
+public class PerfumeKeyword extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,10 +21,10 @@ public class Keyword extends BaseEntity {
     private Perfume perfume;
 
     @Enumerated(EnumType.STRING)
-    private com.swu.perfuinder.domain.enums.Keyword keyword;
+    private KeywordEnum keyword;
 
     @Builder
-    public Keyword(Perfume perfume, com.swu.perfuinder.domain.enums.Keyword keyword) {
+    public PerfumeKeyword(Perfume perfume, KeywordEnum keyword) {
         this.perfume = perfume;
         this.keyword = keyword;
     }

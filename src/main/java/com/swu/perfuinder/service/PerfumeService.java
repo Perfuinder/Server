@@ -2,10 +2,11 @@ package com.swu.perfuinder.service;
 
 import com.swu.perfuinder.config.exception.CustomException;
 import com.swu.perfuinder.config.exception.ErrorCode;
+import com.swu.perfuinder.converter.KeywordConverter;
+import com.swu.perfuinder.converter.NoteConverter;
 import com.swu.perfuinder.converter.PerfumeConverter;
 import com.swu.perfuinder.domain.Perfume;
 import com.swu.perfuinder.domain.enums.Brand;
-import com.swu.perfuinder.domain.enums.NoteType;
 import com.swu.perfuinder.domain.enums.Season;
 import com.swu.perfuinder.dto.celebrity.CelebrityResponse;
 import com.swu.perfuinder.dto.keyword.KeywordResponse;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,9 +30,10 @@ public class PerfumeService {
     private final PerfumeRepository perfumeRepository;
     private final PerfumeConverter perfumeConverter;
     private final VolumeRepository volumeRepository;
-    private final NoteRepository noteRepository;
     private final KeywordRepository keywordRepository;
     private final CelebrityRepository celebrityRepository;
+    private final NoteConverter noteConverter;
+    private final KeywordConverter keywordConverter;
 
     // 홈 화면 조회
     public HomeResponse.HomeInfo getHomeInfo() {
@@ -100,11 +103,11 @@ public class PerfumeService {
                 .collect(Collectors.toList());
 
 
-        // 노트 정보 조회
-        List<NoteResponse.NoteInfo> mainNotes = noteRepository.findByPerfumeIdAndNoteType(perfumeId, NoteType.MAIN);
-        List<NoteResponse.NoteInfo> topNotes = noteRepository.findByPerfumeIdAndNoteType(perfumeId, NoteType.TOP);
-        List<NoteResponse.NoteInfo> middleNotes = noteRepository.findByPerfumeIdAndNoteType(perfumeId, NoteType.MIDDLE);
-        List<NoteResponse.NoteInfo> baseNotes = noteRepository.findByPerfumeIdAndNoteType(perfumeId, NoteType.BASE);
+        // 노트 별 정보 리스트
+        List<NoteResponse.NoteInfo> notes = new ArrayList<>(3);
+        for (int i = 0; i < 3; i++) {
+            notes.add(noteConverter.toNotesInfo(i, perfume, perfume.getNotes()));
+        }
 
         // 키워드 정보 조회
         List<KeywordResponse.KeywordInfo> keywords = keywordRepository.findByPerfumeId(perfumeId);
@@ -121,16 +124,11 @@ public class PerfumeService {
                 .genderCode(perfume.getGender().getCode())
                 .seasonCode(perfume.getSeason().getCode())
                 .volumes(volumes)
-                .mainNotes(mainNotes)
-                .topNotes(topNotes)
-                .middleNotes(middleNotes)
-                .baseNotes(baseNotes)
-                .topDesc(perfume.getTopDesc())
-                .middleDesc(perfume.getMiddleDesc())
-                .baseDesc(perfume.getBaseDesc())
-                .keywords(keywords)
+                .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
+                .keywords(keywordConverter.toKeywordResponse(perfume.getKeywords()))
                 .celebrities(celebrities)
                 .isFavorite(false)  // 로그인 기능 구현 시 수정 필요
+                .notes(notes)
                 .build();
     }
 }
