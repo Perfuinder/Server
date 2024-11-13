@@ -37,7 +37,7 @@ public class PerfumeService {
         Season randomSeason = getRandomSeason();
         Brand randomBrand = getRandomBrand();
 
-        List<Perfume> seasonPerfumeList = perfumeRepository.findRandomBySeason(String.valueOf(randomSeason), 5);
+        List<Perfume> seasonPerfumeList = perfumeRepository.findRandomBySeason(String.valueOf(randomSeason), 1);
         if (seasonPerfumeList.isEmpty()) {
             throw new CustomException(ErrorCode.NO_PERFUME_IN_SEASON);
         }
