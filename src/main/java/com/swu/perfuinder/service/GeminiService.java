@@ -34,8 +34,8 @@ public class GeminiService {
     private final FavoriteRepository favoriteRepository;
 
     // 추천 향수 5종
-    public List<PerfumeResponse.GeminiPerfume> getGeminiRecommendations(
-            PerfumeRequest.GeminiPerfume request,
+    public List<PerfumeResponse.GeminiPerfumeRes> getGeminiRecommendations(
+            PerfumeRequest.GeminiPerfumeReq request,
             String deviceId
     ) {
         // Gemini API 호출하여 추천받기
@@ -108,7 +108,7 @@ public class GeminiService {
     }
 
     // 가격 필터링
-    private List<Perfume> filterByPriceRange(List<Perfume> perfumes, PerfumeRequest.GeminiPerfume request) {
+    private List<Perfume> filterByPriceRange(List<Perfume> perfumes, PerfumeRequest.GeminiPerfumeReq request) {
         int priceRangeCode = request.getPriceRangeCode();
 
         if (priceRangeCode == 0) {

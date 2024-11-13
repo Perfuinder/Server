@@ -33,8 +33,8 @@ public class PerfumeConverter {
     }
 
     // Gemini 향수 5종 추천(탐색) DTO로
-    public PerfumeResponse.GeminiPerfume toGeminiPerfumeResponse(Perfume perfume, boolean isFavorite) {
-        return PerfumeResponse.GeminiPerfume.builder()
+    public PerfumeResponse.GeminiPerfumeRes toGeminiPerfumeResponse(Perfume perfume, boolean isFavorite) {
+        return PerfumeResponse.GeminiPerfumeRes.builder()
                 .id(perfume.getId())
                 .brand(perfume.getBrand())
                 .imageUrl(perfume.getImageUrl())

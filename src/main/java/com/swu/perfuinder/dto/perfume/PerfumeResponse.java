@@ -53,7 +53,7 @@ public class PerfumeResponse {
     @Getter
     @Schema(title = "PERFUME_RES_03 : Gemini 검색 결과 추천 향수 5종 응답 DTO")
     @Builder
-    public static class GeminiPerfume {
+    public static class GeminiPerfumeRes {
         @Schema(description = "향수 ID", example = "0")
         private Long id;
 
@@ -116,7 +116,7 @@ public class PerfumeResponse {
         @Schema(description = "용량별 가격 정보", example = """
        [
            {
-               "volume": "ML_75",
+               "volume": "V_75",
                "price": 279000
            }
        ]
@@ -217,7 +217,7 @@ public class PerfumeResponse {
             }
         ]
         """)
-        private List<KeywordResponse> keywords;
+        private List<KeywordResponse.KeywordInfo> keywords;
 
         @Schema(description = "연예인 목록", example = """
         [
@@ -235,7 +235,7 @@ public class PerfumeResponse {
             }
         ]
         """)
-        private List<CelebrityResponse> celebrities;
+        private List<CelebrityResponse.CelebrityInfo> celebrities;
 
         @Schema(description = "찜 여부", example = "false")
         private boolean isFavorite;
@@ -269,7 +269,7 @@ public class PerfumeResponse {
         @Schema(description = "용량별 가격 정보", example = """
        [
            {
-               "volume": "ML_75",
+               "volume": "V_75",
                "price": 279000
            }
        ]
@@ -399,7 +399,7 @@ public class PerfumeResponse {
         @Schema(description = "용량별 가격 정보", example = """
        [
            {
-               "volume": "ML_75",
+               "volume": V_75",
                "price": 279000
            }
        ]
