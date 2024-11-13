@@ -25,4 +25,7 @@ public interface PerfumeRepository extends JpaRepository<Perfume, Long> {
 
     // 브랜드와 이름을 합쳐서 향수 조회: Gemini용
     Optional<Perfume> findByBrandAndName(Brand brand, String name);
+
+    // 향수 아이디로 조회
+    Optional<Perfume> findById(@Param("perfumeId") Long perfumeId);
 }

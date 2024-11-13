@@ -7,14 +7,12 @@ import com.swu.perfuinder.dto.perfume.PerfumeRequest;
 import com.swu.perfuinder.dto.perfume.PerfumeResponse;
 import com.swu.perfuinder.service.GeminiService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +26,11 @@ public class GeminiController {
     @PostMapping("/search")
     @Operation(summary = "Gemini 향수 추천 API", description = "입력된 조건에 맞는 향수 5종을 추천합니다.")
     // @Schema(name = "GeminiSearchResponse : Gemini 향수 추천 API의 응답")
-    public ApiResponse<List<PerfumeResponse.GeminiPerfume>> getGeminiRecommendations(
-            @RequestBody PerfumeRequest.GeminiPerfume request,
+    public ApiResponse<List<PerfumeResponse.GeminiPerfumeRes>> getGeminiRecommendations(
+            @RequestBody PerfumeRequest.GeminiPerfumeReq request,
             @RequestHeader(value = "Device-Id", required = false) String deviceId
     ) {
-        List<PerfumeResponse.GeminiPerfume> recommendations =
+        List<PerfumeResponse.GeminiPerfumeRes> recommendations =
                 geminiService.getGeminiRecommendations(request, deviceId);
         return ApiResponse.success("향수 추천 성공", recommendations);
     }

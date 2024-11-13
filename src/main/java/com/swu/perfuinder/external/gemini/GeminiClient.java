@@ -28,7 +28,7 @@ public class GeminiClient {
     private final ObjectMapper objectMapper;
 
     // 추천 향수 5종
-    public String getRecommendation(PerfumeRequest.GeminiPerfume request) {
+    public String getRecommendation(PerfumeRequest.GeminiPerfumeReq request) {
         try {
             String prompt = buildPrompt(request);
 
@@ -63,7 +63,7 @@ public class GeminiClient {
     }
 
     // 추천 향수 5종 프롬프트 systemInstruction 및 정보 등등
-    private String buildPrompt(PerfumeRequest.GeminiPerfume request) {
+    private String buildPrompt(PerfumeRequest.GeminiPerfumeReq request) {
         String systemInstruction = """
     You are a perfume recommendation expert.
     Please follow the conditions below strictly:

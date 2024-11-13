@@ -9,7 +9,7 @@ public class PerfumeRequest {
     @Getter
     @Schema(title = "PERFUME_REQ_01 : GEMINI 검색 요청 DTO")
     @Builder
-    public static class GeminiPerfume {
+    public static class GeminiPerfumeReq {
 
         @Schema(description = "키워드 목록", example = "포근한, 시원한")
         private String keywords;
