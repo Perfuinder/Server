@@ -63,23 +63,8 @@ public class PerfumeResponse {
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
 
-        @Schema(description = "메인 노트 목록", example = """
-        [
-            {
-                "noteType": "MAIN",
-                "note": "플로럴"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "머스크"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "우디"
-            }
-        ]
-        """)
-        private List<NoteResponse.NoteInfo> mainNotes;
+        @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
+        private List<String> mainNotes;
 
         @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
         private String description;

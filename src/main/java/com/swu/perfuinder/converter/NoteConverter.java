@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class NoteConverter {
-    public List<NoteResponse.NoteInfo> toMainNoteResponse(List<Note> notes) {
+    public List<String> toMainNoteResponse(List<Note> notes) {
         return notes.stream()
-                .filter(note -> note.getNoteType() == NoteType.MAIN)
-                .map(this::toNoteInfo)
+                .filter(note -> note.getNoteType() == NoteType.MAIN)  // MAIN 노트만 필터링
+                .map(Note::getNote)  // Note 객체에서 note 문자열만 추출
                 .collect(Collectors.toList());
     }
 
