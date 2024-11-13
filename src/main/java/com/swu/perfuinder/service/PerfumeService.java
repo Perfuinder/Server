@@ -42,7 +42,7 @@ public class PerfumeService {
             throw new CustomException(ErrorCode.NO_PERFUME_IN_SEASON);
         }
 
-        List<Perfume> brandPerfumeList = perfumeRepository.findRandomByBrand(String.valueOf(randomBrand), 5);
+        List<Perfume> brandPerfumeList = perfumeRepository.findRandomByBrand(String.valueOf(randomBrand));
         if (brandPerfumeList.isEmpty()) {
             throw new CustomException(ErrorCode.NO_PERFUME_IN_BRAND);
         }
