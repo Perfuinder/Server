@@ -63,23 +63,8 @@ public class PerfumeResponse {
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
 
-        @Schema(description = "메인 노트 목록", example = """
-        [
-            {
-                "noteType": "MAIN",
-                "note": "플로럴"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "머스크"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "우디"
-            }
-        ]
-        """)
-        private List<NoteResponse.NoteInfo> mainNotes;
+        @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
+        private List<String> mainNotes;
 
         @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
         private String description;
@@ -123,101 +108,32 @@ public class PerfumeResponse {
        """)
         private List<VolumeResponse.VolumeInfo> volumes;
 
-        @Schema(description = "메인 노트 목록", example = """
+        @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
+        private List<String> mainNotes;
+
+        @Schema(description = "탑, 미들, 베이스별 노트 리스트 및 설명" ,example = """
         [
             {
-                "noteType": "MAIN",
-                "note": "플로럴"
+                "typeCode": "0", 
+                "notes": "[\\"플로럴\\", \\"우디\\", \\"시트러스\\", \\"달콤한\\"]",
+                "desc": "신선하고 활기찬 시트러스의 향"
             },
             {
-                "noteType": "MAIN",
-                "note": "머스크"
+                "typeCode": "1", 
+                "notes": "[\\"플로럴\\", \\"우디\\", \\"시트러스\\", \\"달콤한\\"]",
+                "desc": "신선하고 활기찬 시트러스의 향"
             },
             {
-                "noteType": "MAIN",
-                "note": "우디"
+                "typeCode": "2", 
+                "notes": "[\\"플로럴\\", \\"우디\\", \\"시트러스\\", \\"달콤한\\"]",
+                "desc": "신선하고 활기찬 시트러스의 향"
             }
         ]
         """)
-        private List<NoteResponse.NoteInfo> mainNotes;
+        private List<NoteResponse.NoteInfo> notes;
 
-        @Schema(description = "탑 노트 목록", example = """
-        [
-            {
-                "noteType": "TOP",
-                "note": "베르가못"
-            },
-            {
-                "noteType": "TOP",
-                "note": "이탈리안 만다린"
-            }
-        ]
-        """)
-        private List<NoteResponse.NoteInfo> topNotes;
-
-        @Schema(description = "탑 노트 설명", example = "신선하고 활기찬 시트러스의 향")
-        private String topDesc;
-
-        @Schema(description = "미들 노트 목록", example = """
-        [
-            {
-                "noteType": "MIDDLE",
-                "note": "암브레트 씨앗"
-            },
-            {
-                "noteType": "MIDDLE",
-                "note": "암브레트"
-            },
-            {
-                "noteType": "MIDDLE",
-                "note": "페어"
-            },
-            {
-                "noteType": "MIDDLE",
-                "note": "플럼"
-            },
-            {
-                "noteType": "MIDDLE",
-                "note": "아이리스"
-            },
-            {
-                "noteType": "MIDDLE",
-                "note": "핑크 페퍼"
-            }
-        ]
-        """)
-        private List<NoteResponse.NoteInfo> middleNotes;
-
-        @Schema(description = "미들 노트 설명", example = "세련되고 독특한 향")
-        private String middleDesc;
-
-        @Schema(description = "베이스 노트 목록", example = """
-        [
-            {
-                "noteType": "BASE",
-                "note": "머스크"
-            }
-        ]
-        """)
-        private List<NoteResponse.NoteInfo> baseNotes;
-
-        @Schema(description = "베이스 노트 설명", example = "감각적이고 매혹적인 향")
-        private String baseDesc;
-
-        @Schema(description = "키워드 목록", example = """
-        [
-            {
-                "keyword": "강렬함"
-            },
-            {
-                "keyword": "모던"
-            },
-            {
-                "keyword": "중성적"
-            }
-        ]
-        """)
-        private List<KeywordResponse.KeywordInfo> keywords;
+        @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
+        private List<String> keywords;
 
         @Schema(description = "연예인 목록", example = """
         [
@@ -276,23 +192,8 @@ public class PerfumeResponse {
        """)
         private List<VolumeResponse.VolumeInfo> volumes;
 
-        @Schema(description = "메인 노트 리스트", example = """
-        [
-            {
-                "noteType": "MAIN",
-                "note": "플로럴"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "머스크"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "우디"
-            }
-        ]
-        """)
-        private List<NoteResponse.NoteInfo> mainNotes;
+        @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
+        private List<String> mainNotes;
 
         @Schema(description = "탑 노트 설명", example = "신선하고 활기찬 시트러스의 향")
         private String topDesc;
@@ -340,23 +241,8 @@ public class PerfumeResponse {
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
 
-        @Schema(description = "메인 노트 리스트", example = """
-        [
-            {
-                "noteType": "MAIN",
-                "note": "플로럴"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "머스크"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "우디"
-            }
-        ]
-        """)
-        private List<NoteResponse.NoteInfo> mainNotes;
+        @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
+        private List<String> mainNotes;
     }
 
     @Getter
@@ -378,23 +264,8 @@ public class PerfumeResponse {
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
 
-        @Schema(description = "메인 노트 리스트", example = """
-        [
-            {
-                "noteType": "MAIN",
-                "note": "플로럴"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "머스크"
-            },
-            {
-                "noteType": "MAIN",
-                "note": "우디"
-            }
-        ]
-        """)
-        private List<NoteResponse.NoteInfo> mainNotes;
+        @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
+        private List<String> mainNotes;
 
         @Schema(description = "용량별 가격 정보", example = """
        [

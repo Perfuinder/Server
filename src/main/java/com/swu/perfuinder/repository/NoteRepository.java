@@ -14,8 +14,4 @@ import java.util.List;
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Log> {
 
-    List<NoteResponse.NoteInfo> findByPerfumeIdAndNoteType(
-            @Param("perfumeId") Long perfumeId,
-            @Param("noteType") NoteType noteType
-    );
 }
