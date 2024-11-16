@@ -2,6 +2,7 @@ package com.swu.perfuinder.service;
 
 import com.swu.perfuinder.config.exception.CustomException;
 import com.swu.perfuinder.config.exception.ErrorCode;
+import com.swu.perfuinder.converter.BrandSearchConverter;
 import com.swu.perfuinder.converter.KeywordConverter;
 import com.swu.perfuinder.converter.NoteConverter;
 import com.swu.perfuinder.converter.PerfumeConverter;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,7 @@ public class PerfumeService {
     private final CelebrityRepository celebrityRepository;
     private final NoteConverter noteConverter;
     private final KeywordConverter keywordConverter;
+    private final BrandSearchConverter brandSearchConverter;
 
     // 홈 화면 조회
     public HomeResponse.HomeInfo getHomeInfo() {
@@ -145,13 +148,40 @@ public class PerfumeService {
                 .collect(Collectors.toList());
     }
 
-    // 향수 비교 선택을 위한 5종 추천
+    // 향수 비교 선택을 위한 5종 추천에 대한 정보 조회
     public List<PerfumeResponse.CompareRecommendPerfume> getCompareRecommendations(List<Long> perfumeIds) {
-        // 선택된 향수들의 메인 노트, 키워드 등을 기반으로 유사한 향수 추천 로직
+
         List<Perfume> recommendations = perfumeRepository.findByPerfumeIds(perfumeIds);
 
         return recommendations.stream()
                 .map(perfumeConverter::toCompareRecommendPerfume)
+                .collect(Collectors.toList());
+    }
+    
+    // 일반 검색
+    public List<PerfumeResponse.SearchPerfume> searchPerfumes(boolean isBrandSearch, String query) {
+        List<Perfume> perfumes;
+
+        if (isBrandSearch) {
+            Brand brand = brandSearchConverter.convertToBrand(query);
+            if (brand == null) {
+                throw new CustomException(ErrorCode.INVALID_BRAND_NAME); // 예외 처리
+            }
+            perfumes = perfumeRepository.findByBrand(brand);
+        } else {
+            perfumes = perfumeRepository.findByNameContaining(query);
+            if (perfumes.isEmpty()) {  // 검색 결과가 없는 경우
+                throw new CustomException(ErrorCode.PERFUME_NOT_FOUND);
+            }
+        }
+
+        // volume 정보 별도 조회 (브랜드 검색, 제품명 검색 모두에 적용)
+        if (!perfumes.isEmpty()) {
+            perfumes = perfumeRepository.findVolumesForPerfumes(perfumes);
+        }
+
+        return perfumes.stream()
+                .map(perfumeConverter::toSearchPerfume)
                 .collect(Collectors.toList());
     }
 }
