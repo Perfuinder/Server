@@ -175,7 +175,7 @@ public class GeminiClient {
             [3. 키워드] %s
             """,
                 getSeasonName(request.getSeasonCode()),
-                getPriceRange(request.getPriceRangeCode(), request.getCustomMinPrice(), request.getCustomMaxPrice()),
+                getPriceRange(request.getPriceRangeCode(), request.getCustomPriceRangeMin(), request.getCustomPriceRangeMax()),
                 request.getKeywords()
         );
 

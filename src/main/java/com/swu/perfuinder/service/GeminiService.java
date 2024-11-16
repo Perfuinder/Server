@@ -11,7 +11,6 @@ import com.swu.perfuinder.external.gemini.GeminiClient;
 import com.swu.perfuinder.repository.FavoriteRepository;
 import com.swu.perfuinder.repository.PerfumeRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -114,8 +113,8 @@ public class GeminiService {
         if (priceRangeCode == 0) {
             return perfumes; // 전체 가격 범위
         } else if (priceRangeCode == 6) {
-            int minPrice = request.getCustomMinPrice();
-            int maxPrice = request.getCustomMaxPrice();
+            int minPrice = request.getCustomPriceRangeMin();
+            int maxPrice = request.getCustomPriceRangeMax();
             return perfumes.stream()
                     .filter(perfume -> hasVolumeInPriceRange(perfume, minPrice, maxPrice))
                     .collect(Collectors.toList());

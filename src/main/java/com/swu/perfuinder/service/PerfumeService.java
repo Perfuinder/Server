@@ -116,17 +116,16 @@ public class PerfumeService {
         List<CelebrityResponse.CelebrityInfo> celebrities = celebrityRepository.findByPerfumeId(perfumeId);
 
         return PerfumeResponse.PerfumeInfo.builder()
-                .id(perfume.getId())
                 .brand(perfume.getBrand())
-                .name(perfume.getName())
-                .description(perfume.getDescription())
+                .perfumeName(perfume.getName())
+                .perfumeDesc(perfume.getDescription())
                 .imageUrl(perfume.getImageUrl())
                 .genderCode(perfume.getGender().getCode())
                 .seasonCode(perfume.getSeason().getCode())
-                .volumes(volumes)
+                .priceDTO(volumes)
                 .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
                 .keywords(keywordConverter.toKeywordResponse(perfume.getKeywords()))
-                .celebrities(celebrities)
+                .celebrityDTO(celebrities)
                 .isFavorite(false)  // 로그인 기능 구현 시 수정 필요
                 .notes(notes)
                 .build();

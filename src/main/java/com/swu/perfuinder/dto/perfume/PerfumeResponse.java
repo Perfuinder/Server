@@ -17,17 +17,17 @@ public class PerfumeResponse {
     @Schema(title = "PERFUME_RES_01 : 랜덤 계절 향수 추천용 응답 DTO")
     @Builder
     public static class RandomSeasonPerfumeInfo {
-        @Schema(description = "향수 ID", example = "0")
-        private Long id;
-
         @Schema(description = "계절 코드", example = "1")
         private int seasonCode; // 계절 코드로 넘겨야 함
+
+        @Schema(description = "향수 ID", example = "0")
+        private Long perfumeId;
 
         @Schema(description = "브랜드", example = "DIPTYQUE")
         private Brand brand;
 
         @Schema(description = "향수명", example = "오 드 퍼퓸 플레르 드 뽀")
-        private String name;
+        private String perfumeName;
 
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
@@ -38,13 +38,13 @@ public class PerfumeResponse {
     @Builder
     public static class RandomBrandPerfumeInfo {
         @Schema(description = "향수 ID", example = "0")
-        private Long id;
+        private Long perfumeId;
 
         @Schema(description = "향수명", example = "오 드 퍼퓸 플레르 드 뽀")
-        private String name;
+        private String perfumeName;
 
         @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
-        private String description;
+        private String perfumeDesc;
 
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
@@ -55,10 +55,13 @@ public class PerfumeResponse {
     @Builder
     public static class GeminiPerfumeRes {
         @Schema(description = "향수 ID", example = "0")
-        private Long id;
+        private Long perfumeId;
 
         @Schema(description = "브랜드", example = "DIPTYQUE")
         private Brand brand;
+
+        @Schema(description = "향수명", example = "오 드 퍼퓸 플레르 드 뽀")
+        private String perfumeName;
 
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
@@ -67,7 +70,7 @@ public class PerfumeResponse {
         private List<String> mainNotes;
 
         @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
-        private String description;
+        private String perfumeDesc;
 
         @Schema(description = "찜 여부", example = "false")
         private boolean isFavorite;
@@ -77,26 +80,21 @@ public class PerfumeResponse {
     @Schema(title = "PERFUME_RES_04 : 향수 상세 정보 응답 DTO")
     @Builder
     public static class PerfumeInfo {
-        @Schema(description = "향수 ID", example = "0")
-        private Long id;
+
+        @Schema(description = "찜 여부", example = "false")
+        private boolean isFavorite;
+
+        @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
+        private String imageUrl;
 
         @Schema(description = "브랜드", example = "DIPTYQUE")
         private Brand brand;
 
         @Schema(description = "향수명", example = "오 드 퍼퓸 플레르 드 뽀")
-        private String name;
+        private String perfumeName;
 
         @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
-        private String description;
-
-        @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
-        private String imageUrl;
-
-        @Schema(description = "성별 코드", example = "1")
-        private int genderCode;
-
-        @Schema(description = "계절 코드", example = "1")
-        private int seasonCode;
+        private String perfumeDesc;
 
         @Schema(description = "용량별 가격 정보", example = """
        [
@@ -106,7 +104,16 @@ public class PerfumeResponse {
            }
        ]
        """)
-        private List<VolumeResponse.VolumeInfo> volumes;
+        private List<VolumeResponse.VolumeInfo> priceDTO;
+
+        @Schema(description = "계절 코드", example = "1")
+        private int seasonCode;
+
+        @Schema(description = "성별 코드", example = "1")
+        private int genderCode;
+
+        @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
+        private List<String> keywords;
 
         @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
         private List<String> mainNotes;
@@ -132,9 +139,6 @@ public class PerfumeResponse {
         """)
         private List<NoteResponse.NoteInfo> notes;
 
-        @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
-        private List<String> keywords;
-
         @Schema(description = "연예인 목록", example = """
         [
             {
@@ -151,10 +155,8 @@ public class PerfumeResponse {
             }
         ]
         """)
-        private List<CelebrityResponse.CelebrityInfo> celebrities;
+        private List<CelebrityResponse.CelebrityInfo> celebrityDTO;
 
-        @Schema(description = "찜 여부", example = "false")
-        private boolean isFavorite;
     }
 
     @Getter
@@ -162,25 +164,16 @@ public class PerfumeResponse {
     @Builder
     public static class ComparePerfumeInfo {
         @Schema(description = "향수 ID", example = "0")
-        private Long id;
+        private Long perfumeId;
+
+        @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
+        private String imageUrl;
 
         @Schema(description = "브랜드", example = "DIPTYQUE")
         private Brand brand;
 
         @Schema(description = "향수명", example = "오 드 퍼퓸 플레르 드 뽀")
-        private String name;
-
-        @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
-        private String description;
-
-        @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
-        private String imageUrl;
-
-        @Schema(description = "성별 코드", example = "1")
-        private int genderCode;
-
-        @Schema(description = "계절 코드", example = "1")
-        private int seasonCode;
+        private String perfumeName;
 
         @Schema(description = "용량별 가격 정보", example = """
        [
@@ -190,22 +183,31 @@ public class PerfumeResponse {
            }
        ]
        """)
-        private List<VolumeResponse.VolumeInfo> volumes;
+        private List<VolumeResponse.VolumeInfo> priceDTO;
+
+        @Schema(description = "계절 코드", example = "1")
+        private int seasonCode;
+
+        @Schema(description = "성별 코드", example = "1")
+        private int genderCode;
+
+        @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
+        private List<String> keywords;
+
+        @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
+        private String description;
 
         @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
         private List<String> mainNotes;
 
         @Schema(description = "탑 노트 설명", example = "신선하고 활기찬 시트러스의 향")
-        private String topDesc;
+        private String topNoteDesc;
 
         @Schema(description = "미들 노트 설명", example = "세련되고 독특한 향")
-        private String middleDesc;
+        private String middleNoteDesc;
 
         @Schema(description = "베이스 노트 설명", example = "감각적이고 매혹적인 향")
-        private String baseDesc;
-
-        @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
-        private List<String> keywords;
+        private String baseNoteDesc;
 
     }
 
@@ -215,22 +217,23 @@ public class PerfumeResponse {
     public static class CompareRecommendPerfume {
 
         @Schema(description = "향수 ID", example = "0")
-        private Long id;
+        private Long perfumeId;
 
         @Schema(description = "브랜드", example = "DIPTYQUE")
         private Brand brand;
 
         @Schema(description = "향수명", example = "오 드 퍼퓸 플레르 드 뽀")
-        private String name;
-
-        @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
-        private String description;
+        private String perfumeName;
 
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
 
         @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
         private List<String> mainNotes;
+
+        @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
+        private String perfumeDesc;
+
     }
 
     @Getter
@@ -238,22 +241,22 @@ public class PerfumeResponse {
     @Builder
     public static class SearchPerfume {
         @Schema(description = "향수 ID", example = "0")
-        private Long id;
+        private Long perfumeId;
 
         @Schema(description = "브랜드", example = "DIPTYQUE")
         private Brand brand;
 
         @Schema(description = "향수명", example = "오 드 퍼퓸 플레르 드 뽀")
-        private String name;
-
-        @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
-        private String description;
+        private String perfumeName;
 
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
 
         @Schema(description = "메인 노트 목록", example = "[\"플로럴\", \"우디\", \"시트러스\", \"달콤한\"]" )
         private List<String> mainNotes;
+
+        @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
+        private String perfumeDesc;
 
         @Schema(description = "용량별 가격 정보", example = """
        [
@@ -263,7 +266,7 @@ public class PerfumeResponse {
            }
        ]
        """)
-        private List<VolumeResponse.VolumeInfo> volumes;
+        private List<VolumeResponse.VolumeInfo> priceDTO;
     }
 
     @Getter
@@ -271,21 +274,21 @@ public class PerfumeResponse {
     @Builder
     public static class FavoritePerfume {
         @Schema(description = "향수 ID", example = "0")
-        private Long id;
+        private Long perfumeId;
 
         @Schema(description = "브랜드", example = "DIPTYQUE")
         private Brand brand;
 
         @Schema(description = "향수명", example = "오 드 퍼퓸 플레르 드 뽀")
-        private String name;
-
-        @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
-        private String description;
+        private String perfumeName;
 
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
 
         @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
         private List<String> keywords;
+
+        @Schema(description = "향수 설명", example = "부드러운 옷 소매를 걷으면 손목에서 날법한 따뜻하고 포근한 체취의 향")
+        private String perfumeDesc;
     }
 }

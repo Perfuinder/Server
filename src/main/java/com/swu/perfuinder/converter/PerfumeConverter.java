@@ -17,10 +17,10 @@ public class PerfumeConverter {
     // 랜덤 계절 향수 정보 DTO로
     public PerfumeResponse.RandomSeasonPerfumeInfo toRandomSeasonPerfumeInfo(Perfume perfume) {
         return PerfumeResponse.RandomSeasonPerfumeInfo.builder()
-                .id(perfume.getId())
+                .perfumeId(perfume.getId())
                 .seasonCode(perfume.getSeason().getCode())
                 .brand(perfume.getBrand())
-                .name(perfume.getName())
+                .perfumeName(perfume.getName())
                 .imageUrl(perfume.getImageUrl())
                 .build();
     }
@@ -28,9 +28,9 @@ public class PerfumeConverter {
     // 랜덤 브랜드 향수 정보 DTO로
     public PerfumeResponse.RandomBrandPerfumeInfo toRandomBrandPerfumeInfo(Perfume perfume) {
         return PerfumeResponse.RandomBrandPerfumeInfo.builder()
-                .id(perfume.getId())
-                .name(perfume.getName())
-                .description(perfume.getDescription())
+                .perfumeId(perfume.getId())
+                .perfumeName(perfume.getName())
+                .perfumeDesc(perfume.getDescription())
                 .imageUrl(perfume.getImageUrl())
                 .build();
     }
@@ -38,29 +38,30 @@ public class PerfumeConverter {
     // Gemini 향수 5종 추천(탐색) DTO로
     public PerfumeResponse.GeminiPerfumeRes toGeminiPerfumeResponse(Perfume perfume, boolean isFavorite) {
         return PerfumeResponse.GeminiPerfumeRes.builder()
-                .id(perfume.getId())
+                .perfumeId(perfume.getId())
                 .brand(perfume.getBrand())
                 .imageUrl(perfume.getImageUrl())
+                .perfumeName(perfume.getName())
                 .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
-                .description(perfume.getDescription())
+                .perfumeDesc(perfume.getDescription())
                 .isFavorite(isFavorite)
                 .build();
     }
 
     public PerfumeResponse.ComparePerfumeInfo toComparePerfumeResponse(Perfume perfume) {
         return PerfumeResponse.ComparePerfumeInfo.builder()
-                .id(perfume.getId())
+                .perfumeId(perfume.getId())
                 .brand(perfume.getBrand())
-                .name(perfume.getName())
+                .perfumeName(perfume.getName())
                 .description(perfume.getDescription())
                 .imageUrl(perfume.getImageUrl())
                 .genderCode(perfume.getGender().getCode())
                 .seasonCode(perfume.getSeason().getCode())
-                .volumes(volumeConverter.toVolumeResponse(perfume.getVolumes()))
+                .priceDTO(volumeConverter.toVolumeResponse(perfume.getVolumes()))
                 .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
-                .topDesc(perfume.getTopDesc())
-                .middleDesc(perfume.getMiddleDesc())
-                .baseDesc(perfume.getBaseDesc())
+                .topNoteDesc(perfume.getTopDesc())
+                .middleNoteDesc(perfume.getMiddleDesc())
+                .baseNoteDesc(perfume.getBaseDesc())
                 .keywords(keywordConverter.toKeywordStringResponse(perfume.getKeywords()))
                 .build();
     }
