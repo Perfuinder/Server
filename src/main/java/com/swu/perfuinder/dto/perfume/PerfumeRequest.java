@@ -22,10 +22,10 @@ public class PerfumeRequest {
         private int priceRangeCode;
 
         @Schema(description = "최소 가격 (직접 입력 시: 가격 범위 코드가 6일 때)", example = "0")
-        private int customMinPrice;
+        private int CustomPriceRangeMin;
 
         @Schema(description = "최대 가격 (직접 입력 시: 가격 범위 코드가 6일 때)", example = "100000")
-        private int customMaxPrice;
+        private int CustomPriceRangeMax;
 
     }
 

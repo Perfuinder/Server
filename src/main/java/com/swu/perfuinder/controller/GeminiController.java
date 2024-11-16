@@ -37,10 +37,10 @@ public class GeminiController {
 
     @PostMapping(value = "/image/keyword", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Gemini 이미지 키워드 추출 API", description = "이미지의 키워드를 추출합니다.")
-    public List<String> extractKeywordsFromImage(@RequestParam("image") MultipartFile imageFile)  {
+    public List<String> extractKeywordsFromImage(@RequestParam("image") MultipartFile imageData)  {
         List<String> keywords = new ArrayList<>();
         try {
-            keywords = geminiService.extractKeywordsFromImage(imageFile);
+            keywords = geminiService.extractKeywordsFromImage(imageData);
         } catch (Exception e) {
             throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
         }

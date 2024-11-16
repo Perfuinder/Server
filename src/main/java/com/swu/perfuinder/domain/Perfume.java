@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class Perfume extends BaseEntity {
     private List<Note> notes = new ArrayList<>();
 
     @OneToMany(mappedBy = "perfume", cascade = CascadeType.ALL)
-    private List<Keyword> keywords = new ArrayList<>();
+    private List<PerfumeKeyword> keywords = new ArrayList<>();
 
     @OneToMany(mappedBy = "perfume", cascade = CascadeType.ALL)
     private List<Celebrity> celebrities = new ArrayList<>();
@@ -77,7 +76,7 @@ public class Perfume extends BaseEntity {
         note.setPerfume(this);
     }
 
-    public void addKeyword(Keyword keyword) {
+    public void addKeyword(PerfumeKeyword keyword) {
         keywords.add(keyword);
         keyword.setPerfume(this);
     }
