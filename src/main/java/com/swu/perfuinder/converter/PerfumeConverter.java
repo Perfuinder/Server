@@ -3,8 +3,11 @@ package com.swu.perfuinder.converter;
 import com.swu.perfuinder.domain.Perfume;
 import com.swu.perfuinder.domain.Volume;
 import com.swu.perfuinder.dto.perfume.PerfumeResponse;
+import com.swu.perfuinder.dto.volume.VolumeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -48,6 +51,7 @@ public class PerfumeConverter {
                 .build();
     }
 
+    // 비교 정보 조회 DTO로
     public PerfumeResponse.ComparePerfumeInfo toComparePerfumeResponse(Perfume perfume) {
         return PerfumeResponse.ComparePerfumeInfo.builder()
                 .perfumeId(perfume.getId())
@@ -75,6 +79,24 @@ public class PerfumeConverter {
                 .imageUrl(perfume.getImageUrl())
                 .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
                 .perfumeDesc(perfume.getDescription())
+                .build();
+    }
+
+    // 일반 검색 DTO로
+    public PerfumeResponse.SearchPerfume toSearchPerfume(Perfume perfume) {
+        return PerfumeResponse.SearchPerfume.builder()
+                .perfumeId(perfume.getId())
+                .brand(perfume.getBrand())
+                .perfumeName(perfume.getName())
+                .imageUrl(perfume.getImageUrl())
+                .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
+                .perfumeDesc(perfume.getDescription())
+                .priceDTO(perfume.getVolumes().stream()
+                        .map(volume -> VolumeResponse.VolumeInfo.builder()
+                                .volume(volume.getVolume())
+                                .price(volume.getPrice())
+                                .build())
+                        .collect(Collectors.toList()))
                 .build();
     }
 

@@ -106,4 +106,41 @@ public class PerfumeController {
                 perfumeService.getCompareRecommendations(perfumeIdList)
         );
     }
+
+    @GetMapping("/search/{isBrandSearch}/{query}")
+    @Operation(
+            summary = "향수 일반 검색 API",
+            description = "브랜드 또는 제품명으로 향수를 검색합니다."
+    )
+    @Parameters({
+            @Parameter(
+                    name = "isBrandSearch",
+                    description = "브랜드 검색 여부",
+                    example = "true",
+                    required = true
+            ),
+            @Parameter(
+                    name = "query",
+                    description = "검색어",
+                    example = "딥티크 or 로즈",
+                    required = true
+            )
+    })
+    public ApiResponse<List<PerfumeResponse.SearchPerfume>> searchPerfumes(
+            @PathVariable boolean isBrandSearch,
+            @PathVariable String query
+    ) {
+        if (isBrandSearch) { // 브랜드 건색인 경우
+            return ApiResponse.success(
+                    "향수 브랜드 검색 성공",
+                    perfumeService.searchPerfumes(isBrandSearch, query)
+            );
+        } else {
+            return ApiResponse.success(
+                    "향수 제품명 검색 성공",
+                    perfumeService.searchPerfumes(isBrandSearch, query)
+            );
+        }
+
+    }
 }
