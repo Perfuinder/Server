@@ -62,7 +62,7 @@ public class GeminiService {
     // 브랜드 명 변환
     private Brand convertBrand(String koreanBrand) {
         return switch (koreanBrand.trim()) {
-            case "딥티크" -> Brand.DIPTYQUE;
+            case "딥티크", "딥디크" -> Brand.DIPTYQUE;
             case "조말론" -> Brand.JOMALONE;
             case "포맨트" -> Brand.FORMENT;
             case "바이레도" -> Brand.BYREDO;
