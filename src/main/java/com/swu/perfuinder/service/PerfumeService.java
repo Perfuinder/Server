@@ -144,4 +144,14 @@ public class PerfumeService {
                 .map(perfumeConverter::toComparePerfumeResponse)
                 .collect(Collectors.toList());
     }
+
+    // 향수 비교 선택을 위한 5종 추천
+    public List<PerfumeResponse.CompareRecommendPerfume> getCompareRecommendations(List<Long> perfumeIds) {
+        // 선택된 향수들의 메인 노트, 키워드 등을 기반으로 유사한 향수 추천 로직
+        List<Perfume> recommendations = perfumeRepository.findByPerfumeIds(perfumeIds);
+
+        return recommendations.stream()
+                .map(perfumeConverter::toCompareRecommendPerfume)
+                .collect(Collectors.toList());
+    }
 }
