@@ -74,4 +74,36 @@ public class PerfumeController {
                 perfumeService.getComparePerfumes(perfumeIdList)
         );
     }
+
+    @GetMapping("/compare/recommend/{perfumeIDs}")
+    @Operation(
+            summary = "비교하기 향수 추천 조회 API",
+            description = "선택된 향수들과 비교할 수 있는 향수들을 추천합니다."
+    )
+    @Parameters({
+            @Parameter(
+                    name = "perfumeIDs",
+                    description = "현재 선택된 향수 ID 목록 (5개 고정, []안에 콤마로 구분)",
+                    example = "[1001,1002,1003,1004,1005]",
+                    required = true,
+                    in = ParameterIn.PATH
+            )
+    })
+    public ApiResponse<List<PerfumeResponse.CompareRecommendPerfume>> getCompareRecommendations(
+            @PathVariable List<Integer> perfumeIDs
+    ) {
+        // 크기 검증
+        if (perfumeIDs.size() != 5) {
+            throw new CustomException(ErrorCode.INVALID_PERFUME_COUNT);
+        }
+
+        List<Long> perfumeIdList = perfumeIDs.stream()
+                .map(Long::valueOf)
+                .collect(Collectors.toList());
+
+        return ApiResponse.success(
+                "비교 추천 향수 조회 성공",
+                perfumeService.getCompareRecommendations(perfumeIdList)
+        );
+    }
 }

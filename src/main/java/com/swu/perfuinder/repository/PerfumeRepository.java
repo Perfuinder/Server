@@ -28,4 +28,10 @@ public interface PerfumeRepository extends JpaRepository<Perfume, Long> {
 
     // 향수 아이디로 조회
     Optional<Perfume> findById(@Param("perfumeId") Long perfumeId);
+
+    // 향수 비교 선택 추천을 위한 아이디들로 조회
+    @Query("SELECT DISTINCT p FROM Perfume p " +
+            "LEFT JOIN FETCH p.notes n " +
+            "WHERE p.id IN :perfumeIds")
+    List<Perfume> findByPerfumeIds(@Param("perfumeIds") List<Long> perfumeIds);
 }

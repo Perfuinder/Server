@@ -66,4 +66,16 @@ public class PerfumeConverter {
                 .build();
     }
 
+    // 향수 비교 선택 추천 조회를 위한 노트 변경
+    public PerfumeResponse.CompareRecommendPerfume toCompareRecommendPerfume(Perfume perfume) {
+        return PerfumeResponse.CompareRecommendPerfume.builder()
+                .perfumeId(perfume.getId())
+                .brand(perfume.getBrand())
+                .perfumeName(perfume.getName())
+                .imageUrl(perfume.getImageUrl())
+                .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
+                .perfumeDesc(perfume.getDescription())
+                .build();
+    }
+
 }
