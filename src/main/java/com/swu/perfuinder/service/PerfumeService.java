@@ -131,4 +131,18 @@ public class PerfumeService {
                 .notes(notes)
                 .build();
     }
+
+    // 향수 비교 정보 조회
+    public List<PerfumeResponse.ComparePerfumeInfo> getComparePerfumes(List<Long> perfumeIds) {
+        List<Perfume> perfumes = perfumeRepository.findAllById(perfumeIds);
+
+        // 요청한 ID가 모두 존재하는지 확인
+        if (perfumes.size() != perfumeIds.size()) {
+            throw new CustomException(ErrorCode.PERFUME_NOT_FOUND);
+        }
+
+        return perfumes.stream()
+                .map(perfumeConverter::toComparePerfumeResponse)
+                .collect(Collectors.toList());
+    }
 }

@@ -204,20 +204,8 @@ public class PerfumeResponse {
         @Schema(description = "베이스 노트 설명", example = "감각적이고 매혹적인 향")
         private String baseDesc;
 
-        @Schema(description = "키워드 목록", example = """
-        [
-            {
-                "keyword": "강렬함"
-            },
-            {
-                "keyword": "모던"
-            },
-            {
-                "keyword": "중성적"
-            }
-        ]
-        """)
-        private List<KeywordResponse.KeywordInfo> keywords;
+        @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
+        private List<String> keywords;
 
     }
 
@@ -297,19 +285,7 @@ public class PerfumeResponse {
         @Schema(description = "이미지 URL", example = "https://image.sivillage.com/upload/C00001/goods/org/953/231108006980953.jpg?RS=750&SP=1")
         private String imageUrl;
 
-        @Schema(description = "키워드 목록", example = """
-        [
-            {
-                "keyword": "강렬함"
-            },
-            {
-                "keyword": "모던"
-            },
-            {
-                "keyword": "중성적"
-            }
-        ]
-        """)
-        private List<KeywordResponse.KeywordInfo> keywords;
+        @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
+        private List<String> keywords;
     }
 }
