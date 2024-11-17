@@ -26,7 +26,7 @@ public class PerfumeController {
     private final PerfumeService perfumeService;
 
     @Operation(summary = "향수 상세 정보 조회", description = "향수 ID를 통해 향수의 상세 정보를 조회합니다.")
-    @GetMapping("/{perfumeId}")
+    @GetMapping("/{perfumeID}")
     public ApiResponse<PerfumeResponse.PerfumeInfo> getPerfumeDetail(
             @Parameter(description = "향수 ID", required = true)
             @PathVariable Long perfumeId
@@ -37,14 +37,14 @@ public class PerfumeController {
         );
     }
 
-    @GetMapping("/compare/{perfumeId}")  // perfumeIds -> perfumeId
+    @GetMapping("/compare/{perfumeID}")
     @Operation(
             summary = "향수 비교 정보 조회 API",
             description = "선택한 향수들의 상세 정보를 조회합니다."
     )
     @Parameters({
             @Parameter(
-                    name = "perfumeId",  // perfumeIds -> perfumeId
+                    name = "perfumeId",
                     description = "비교할 향수 ID 목록 ([]안에 콤마로 구분)",
                     example = "[1001,1002]",
                     required = true,

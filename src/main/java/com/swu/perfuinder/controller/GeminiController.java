@@ -35,7 +35,7 @@ public class GeminiController {
         return ApiResponse.success("향수 추천 성공", recommendations);
     }
 
-    @PostMapping(value = "/image/keyword", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/image/keywords", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Gemini 이미지 키워드 추출 API", description = "이미지의 키워드를 추출합니다.")
     public List<String> extractKeywordsFromImage(@RequestParam("image") MultipartFile imageData)  {
         List<String> keywords = new ArrayList<>();
