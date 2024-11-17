@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-@Tag(name = "HomeController", description = "홈 화면")
+@Tag(name = "HomeController", description = "홈 화면 조회 API")
 public class HomeController {
     private final PerfumeService perfumeService;
 

@@ -6,6 +6,7 @@ import com.swu.perfuinder.converter.BrandSearchConverter;
 import com.swu.perfuinder.converter.KeywordConverter;
 import com.swu.perfuinder.converter.NoteConverter;
 import com.swu.perfuinder.converter.PerfumeConverter;
+import com.swu.perfuinder.domain.Favorite;
 import com.swu.perfuinder.domain.Perfume;
 import com.swu.perfuinder.domain.enums.Brand;
 import com.swu.perfuinder.domain.enums.Season;
@@ -21,8 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -184,5 +185,28 @@ public class PerfumeService {
         return perfumes.stream()
                 .map(perfumeConverter::toSearchPerfume)
                 .collect(Collectors.toList());
+    }
+
+    // 향수 찜하기 상태 변경
+    public boolean toggleFavorite(Long perfumeId) {
+        // 향수 존재 확인
+        Perfume perfume = perfumeRepository.findById(perfumeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PERFUME_NOT_FOUND));
+
+        // 현재 찜하기 상태 확인
+        Optional<Favorite> existingFavorite = favoriteRepository.findByPerfumeId(perfumeId);
+
+        if (existingFavorite.isPresent()) {
+            // 이미 찜한 경우 -> 찜하기 취소
+            favoriteRepository.delete(existingFavorite.get());
+            return false;
+        } else {
+            // 찜하지 않은 경우 -> 찜하기 추가
+            Favorite favorite = Favorite.builder()
+                    .perfume(perfume)
+                    .build();
+            favoriteRepository.save(favorite);
+            return true;
+        }
     }
 }

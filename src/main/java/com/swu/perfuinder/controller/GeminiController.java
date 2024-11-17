@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/gemini")
 @RequiredArgsConstructor
-@Tag(name = "GeminiController", description = "Gemini 관련 기능")
+@Tag(name = "GeminiController", description = "Gemini 관련 기능 API")
 public class GeminiController {
     private final GeminiService geminiService;
 

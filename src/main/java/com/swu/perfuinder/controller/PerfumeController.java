@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +23,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/perfumes")
 @Validated
 @RequiredArgsConstructor
+@Tag(name = "PerfumeController", description = "향수 관련 API")
 public class PerfumeController {
     private final PerfumeService perfumeService;
 
-    @Operation(summary = "향수 상세 정보 조회", description = "향수 ID를 통해 향수의 상세 정보를 조회합니다.")
+    @Operation(summary = "향수 상세 정보 조회 API", description = "향수 ID를 통해 향수의 상세 정보를 조회합니다.")
     @GetMapping("/{perfumeId}")
     public ApiResponse<PerfumeResponse.PerfumeInfo> getPerfumeDetail(
             @Parameter(description = "향수 ID", required = true)
@@ -142,5 +144,25 @@ public class PerfumeController {
             );
         }
 
+    }
+
+    @PostMapping("/favorites/{perfumeId}")
+    @Operation(
+            summary = "향수 찜하기 상태 변경 API",
+            description = "향수의 찜하기 상태를 토글합니다."
+    )
+    @Parameter(
+            name = "perfumeId",
+            description = "향수 ID",
+            example = "1001",
+            required = true
+    )
+    public ApiResponse<Boolean> toggleFavorite(
+            @PathVariable Integer perfumeId
+    ) {
+        return ApiResponse.success(
+                "찜하기 상태 변경 성공",
+                perfumeService.toggleFavorite(perfumeId.longValue())
+        );
     }
 }
