@@ -34,6 +34,7 @@ public class PerfumeService {
     private final VolumeRepository volumeRepository;
     private final KeywordRepository keywordRepository;
     private final CelebrityRepository celebrityRepository;
+    private final FavoriteRepository favoriteRepository;
     private final NoteConverter noteConverter;
     private final KeywordConverter keywordConverter;
     private final BrandSearchConverter brandSearchConverter;
@@ -129,7 +130,7 @@ public class PerfumeService {
                 .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
                 .keywords(keywordConverter.toKeywordResponse(perfume.getKeywords()))
                 .celebrityDTO(celebrities)
-                .isFavorite(false)  // 로그인 기능 구현 시 수정 필요
+                .isFavorite(favoriteRepository.existsByPerfumeId(perfumeId))
                 .notes(notes)
                 .build();
     }
