@@ -2,10 +2,7 @@ package com.swu.perfuinder.domain;
 
 import com.swu.perfuinder.domain.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -21,14 +18,8 @@ public class Favorite extends BaseEntity {
     @JoinColumn(name = "perfume_id")
     private Perfume perfume;
 
-    @Column(length = 100)
-    private String deviceId;
-
-    @Builder
-    public Favorite(Perfume perfume, String deviceId) {
-        this.perfume = perfume;
-        this.deviceId = deviceId;
-    }
+//    @Column(length = 100)
+//    private String deviceId;
 
     // 연관관계 편의 메서드
     public void setPerfume(Perfume perfume) {

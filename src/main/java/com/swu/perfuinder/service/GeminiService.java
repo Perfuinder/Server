@@ -34,8 +34,7 @@ public class GeminiService {
 
     // 추천 향수 5종
     public List<PerfumeResponse.GeminiPerfumeRes> getGeminiRecommendations(
-            PerfumeRequest.GeminiPerfumeReq request,
-            String deviceId
+            PerfumeRequest.GeminiPerfumeReq request
     ) {
         // Gemini API 호출하여 추천받기
         String recommendation = geminiClient.getRecommendation(request);
@@ -52,9 +51,7 @@ public class GeminiService {
         // 찜하기 상태와 함께 응답 DTO 변환
         return recommendedPerfumes.stream()
                 .map(perfume -> perfumeConverter.toGeminiPerfumeResponse(
-                        perfume,
-                        deviceId != null &&
-                                favoriteRepository.existsByPerfumeIdAndDeviceId(perfume.getId(), deviceId)
+                        perfume, favoriteRepository.existsByPerfumeId(perfume.getId())
                 ))
                 .collect(Collectors.toList());
     }

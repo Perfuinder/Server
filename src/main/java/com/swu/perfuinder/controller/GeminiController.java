@@ -27,11 +27,12 @@ public class GeminiController {
     @Operation(summary = "Gemini 향수 추천 API", description = "입력된 조건에 맞는 향수 5종을 추천합니다.")
     // @Schema(name = "GeminiSearchResponse : Gemini 향수 추천 API의 응답")
     public ApiResponse<List<PerfumeResponse.GeminiPerfumeRes>> getGeminiRecommendations(
-            @RequestBody PerfumeRequest.GeminiPerfumeReq request,
-            @RequestHeader(value = "Device-Id", required = false) String deviceId
+            @RequestBody PerfumeRequest.GeminiPerfumeReq request
+            // @RequestHeader(value = "Device-Id", required = false) String deviceId
     ) {
         List<PerfumeResponse.GeminiPerfumeRes> recommendations =
-                geminiService.getGeminiRecommendations(request, deviceId);
+//                geminiService.getGeminiRecommendations(request, deviceId);
+                geminiService.getGeminiRecommendations(request);
         return ApiResponse.success("향수 추천 성공", recommendations);
     }
 
