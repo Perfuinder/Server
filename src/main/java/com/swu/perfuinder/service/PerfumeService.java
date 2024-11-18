@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PerfumeService {
     private final PerfumeRepository perfumeRepository;
     private final PerfumeConverter perfumeConverter;
@@ -41,6 +40,7 @@ public class PerfumeService {
     private final BrandSearchConverter brandSearchConverter;
 
     // 홈 화면 조회
+    @Transactional(readOnly = true)
     public HomeResponse.HomeInfo getHomeInfo() {
         Season randomSeason = getRandomSeason();
         Brand randomBrand = getRandomBrand();
@@ -93,6 +93,7 @@ public class PerfumeService {
     }
 
     // 향수 상세 정보 조회
+    @Transactional(readOnly = true)
     public PerfumeResponse.PerfumeInfo getPerfumeDetail(Long perfumeId) {
         // 향수 기본 정보 조회
         Perfume perfume = perfumeRepository.findById(perfumeId)
@@ -137,6 +138,7 @@ public class PerfumeService {
     }
 
     // 향수 비교 정보 조회
+    @Transactional(readOnly = true)
     public List<PerfumeResponse.ComparePerfumeInfo> getComparePerfumes(List<Long> perfumeIds) {
         List<Perfume> perfumes = perfumeRepository.findAllById(perfumeIds);
 
@@ -151,6 +153,7 @@ public class PerfumeService {
     }
 
     // 향수 비교 선택을 위한 5종 추천에 대한 정보 조회
+    @Transactional(readOnly = true)
     public List<PerfumeResponse.CompareRecommendPerfume> getCompareRecommendations(List<Long> perfumeIds) {
 
         List<Perfume> recommendations = perfumeRepository.findByPerfumeIds(perfumeIds);
@@ -161,6 +164,7 @@ public class PerfumeService {
     }
     
     // 일반 검색
+    @Transactional(readOnly = true)
     public List<PerfumeResponse.SearchPerfume> searchPerfumes(boolean isBrandSearch, String query) {
         List<Perfume> perfumes;
 
@@ -188,6 +192,7 @@ public class PerfumeService {
     }
 
     // 향수 찜하기 상태 변경
+    @Transactional
     public boolean toggleFavorite(Long perfumeId) {
         // 향수 존재 확인
         Perfume perfume = perfumeRepository.findById(perfumeId)
