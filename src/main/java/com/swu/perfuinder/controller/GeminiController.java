@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/gemini")
 @RequiredArgsConstructor
-@Tag(name = "GeminiController", description = "Gemini 관련 기능")
+@Tag(name = "GeminiController", description = "Gemini 관련 기능 API")
 public class GeminiController {
     private final GeminiService geminiService;
 
@@ -27,15 +27,16 @@ public class GeminiController {
     @Operation(summary = "Gemini 향수 추천 API", description = "입력된 조건에 맞는 향수 5종을 추천합니다.")
     // @Schema(name = "GeminiSearchResponse : Gemini 향수 추천 API의 응답")
     public ApiResponse<List<PerfumeResponse.GeminiPerfumeRes>> getGeminiRecommendations(
-            @RequestBody PerfumeRequest.GeminiPerfumeReq request,
-            @RequestHeader(value = "Device-Id", required = false) String deviceId
+            @RequestBody PerfumeRequest.GeminiPerfumeReq request
+            // @RequestHeader(value = "Device-Id", required = false) String deviceId
     ) {
         List<PerfumeResponse.GeminiPerfumeRes> recommendations =
-                geminiService.getGeminiRecommendations(request, deviceId);
+//                geminiService.getGeminiRecommendations(request, deviceId);
+                geminiService.getGeminiRecommendations(request);
         return ApiResponse.success("향수 추천 성공", recommendations);
     }
 
-    @PostMapping(value = "/image/keyword", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/image/keywords", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Gemini 이미지 키워드 추출 API", description = "이미지의 키워드를 추출합니다.")
     public List<String> extractKeywordsFromImage(@RequestParam("image") MultipartFile imageData)  {
         List<String> keywords = new ArrayList<>();

@@ -6,6 +6,7 @@ import com.swu.perfuinder.converter.BrandSearchConverter;
 import com.swu.perfuinder.converter.KeywordConverter;
 import com.swu.perfuinder.converter.NoteConverter;
 import com.swu.perfuinder.converter.PerfumeConverter;
+import com.swu.perfuinder.domain.Favorite;
 import com.swu.perfuinder.domain.Perfume;
 import com.swu.perfuinder.domain.enums.Brand;
 import com.swu.perfuinder.domain.enums.Season;
@@ -21,24 +22,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PerfumeService {
     private final PerfumeRepository perfumeRepository;
     private final PerfumeConverter perfumeConverter;
     private final VolumeRepository volumeRepository;
     private final KeywordRepository keywordRepository;
     private final CelebrityRepository celebrityRepository;
+    private final FavoriteRepository favoriteRepository;
     private final NoteConverter noteConverter;
     private final KeywordConverter keywordConverter;
     private final BrandSearchConverter brandSearchConverter;
 
     // 홈 화면 조회
+    @Transactional(readOnly = true)
     public HomeResponse.HomeInfo getHomeInfo() {
         Season randomSeason = getRandomSeason();
         Brand randomBrand = getRandomBrand();
@@ -91,6 +93,7 @@ public class PerfumeService {
     }
 
     // 향수 상세 정보 조회
+    @Transactional(readOnly = true)
     public PerfumeResponse.PerfumeInfo getPerfumeDetail(Long perfumeId) {
         // 향수 기본 정보 조회
         Perfume perfume = perfumeRepository.findById(perfumeId)
@@ -129,12 +132,13 @@ public class PerfumeService {
                 .mainNotes(noteConverter.toMainNoteResponse(perfume.getNotes()))
                 .keywords(keywordConverter.toKeywordResponse(perfume.getKeywords()))
                 .celebrityDTO(celebrities)
-                .isFavorite(false)  // 로그인 기능 구현 시 수정 필요
+                .isFavorite(favoriteRepository.existsByPerfumeId(perfumeId))
                 .notes(notes)
                 .build();
     }
 
     // 향수 비교 정보 조회
+    @Transactional(readOnly = true)
     public List<PerfumeResponse.ComparePerfumeInfo> getComparePerfumes(List<Long> perfumeIds) {
         List<Perfume> perfumes = perfumeRepository.findAllById(perfumeIds);
 
@@ -149,6 +153,7 @@ public class PerfumeService {
     }
 
     // 향수 비교 선택을 위한 5종 추천에 대한 정보 조회
+    @Transactional(readOnly = true)
     public List<PerfumeResponse.CompareRecommendPerfume> getCompareRecommendations(List<Long> perfumeIds) {
 
         List<Perfume> recommendations = perfumeRepository.findByPerfumeIds(perfumeIds);
@@ -159,6 +164,7 @@ public class PerfumeService {
     }
     
     // 일반 검색
+    @Transactional(readOnly = true)
     public List<PerfumeResponse.SearchPerfume> searchPerfumes(boolean isBrandSearch, String query) {
         List<Perfume> perfumes;
 
@@ -183,5 +189,29 @@ public class PerfumeService {
         return perfumes.stream()
                 .map(perfumeConverter::toSearchPerfume)
                 .collect(Collectors.toList());
+    }
+
+    // 향수 찜하기 상태 변경
+    @Transactional
+    public boolean toggleFavorite(Long perfumeId) {
+        // 향수 존재 확인
+        Perfume perfume = perfumeRepository.findById(perfumeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PERFUME_NOT_FOUND));
+
+        // 현재 찜하기 상태 확인
+        Optional<Favorite> existingFavorite = favoriteRepository.findByPerfumeId(perfumeId);
+
+        if (existingFavorite.isPresent()) {
+            // 이미 찜한 경우 -> 찜하기 취소
+            favoriteRepository.delete(existingFavorite.get());
+            return false;
+        } else {
+            // 찜하지 않은 경우 -> 찜하기 추가
+            Favorite favorite = Favorite.builder()
+                    .perfume(perfume)
+                    .build();
+            favoriteRepository.save(favorite);
+            return true;
+        }
     }
 }

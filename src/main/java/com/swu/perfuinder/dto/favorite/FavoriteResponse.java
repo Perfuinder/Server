@@ -14,8 +14,8 @@ public class FavoriteResponse {
         @Schema(description = "향수 ID")
         private Long perfumeId;
 
-        @Schema(description = "찜 상태")
-        private boolean isFavorite;
+//        @Schema(description = "찜 상태")
+//        private boolean isFavorite;
     }
 
 }

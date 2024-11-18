@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +23,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/perfumes")
 @Validated
 @RequiredArgsConstructor
+@Tag(name = "PerfumeController", description = "향수 관련 API")
 public class PerfumeController {
     private final PerfumeService perfumeService;
 
-    @Operation(summary = "향수 상세 정보 조회", description = "향수 ID를 통해 향수의 상세 정보를 조회합니다.")
+    @Operation(summary = "향수 상세 정보 조회 API", description = "향수 ID를 통해 향수의 상세 정보를 조회합니다.")
     @GetMapping("/{perfumeId}")
     public ApiResponse<PerfumeResponse.PerfumeInfo> getPerfumeDetail(
             @Parameter(description = "향수 ID", required = true)
@@ -37,14 +39,14 @@ public class PerfumeController {
         );
     }
 
-    @GetMapping("/compare/{perfumeId}")  // perfumeIds -> perfumeId
+    @GetMapping("/compare/{perfumeId}")
     @Operation(
             summary = "향수 비교 정보 조회 API",
             description = "선택한 향수들의 상세 정보를 조회합니다."
     )
     @Parameters({
             @Parameter(
-                    name = "perfumeId",  // perfumeIds -> perfumeId
+                    name = "perfumeId",
                     description = "비교할 향수 ID 목록 ([]안에 콤마로 구분)",
                     example = "[1001,1002]",
                     required = true,
@@ -52,7 +54,7 @@ public class PerfumeController {
             )
     })
     public ApiResponse<List<PerfumeResponse.ComparePerfumeInfo>> getComparePerfumes(
-            @PathVariable List<Integer> perfumeId  // perfumeIds -> perfumeId
+            @PathVariable List<Integer> perfumeId
     ) {
         // Integer를 Long으로 변환
         List<Long> perfumeIdList = perfumeId.stream()
@@ -75,14 +77,14 @@ public class PerfumeController {
         );
     }
 
-    @GetMapping("/compare/recommend/{perfumeIDs}")
+    @GetMapping("/compare/recommend/{perfumeIds}")
     @Operation(
             summary = "비교하기 향수 추천 조회 API",
             description = "선택된 향수들과 비교할 수 있는 향수들을 추천합니다."
     )
     @Parameters({
             @Parameter(
-                    name = "perfumeIDs",
+                    name = "perfumeIds",
                     description = "현재 선택된 향수 ID 목록 (5개 고정, []안에 콤마로 구분)",
                     example = "[1001,1002,1003,1004,1005]",
                     required = true,
@@ -90,14 +92,14 @@ public class PerfumeController {
             )
     })
     public ApiResponse<List<PerfumeResponse.CompareRecommendPerfume>> getCompareRecommendations(
-            @PathVariable List<Integer> perfumeIDs
+            @PathVariable List<Integer> perfumeIds
     ) {
         // 크기 검증
-        if (perfumeIDs.size() != 5) {
+        if (perfumeIds.size() != 5) {
             throw new CustomException(ErrorCode.INVALID_PERFUME_COUNT);
         }
 
-        List<Long> perfumeIdList = perfumeIDs.stream()
+        List<Long> perfumeIdList = perfumeIds.stream()
                 .map(Long::valueOf)
                 .collect(Collectors.toList());
 
@@ -142,5 +144,25 @@ public class PerfumeController {
             );
         }
 
+    }
+
+    @PostMapping("/favorites/{perfumeId}")
+    @Operation(
+            summary = "향수 찜하기 상태 변경 API",
+            description = "향수의 찜하기 상태를 토글합니다."
+    )
+    @Parameter(
+            name = "perfumeId",
+            description = "향수 ID",
+            example = "1001",
+            required = true
+    )
+    public ApiResponse<Boolean> toggleFavorite(
+            @PathVariable Integer perfumeId
+    ) {
+        return ApiResponse.success(
+                "찜하기 상태 변경 성공",
+                perfumeService.toggleFavorite(perfumeId.longValue())
+        );
     }
 }
