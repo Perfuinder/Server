@@ -54,4 +54,11 @@ public interface PerfumeRepository extends JpaRepository<Perfume, Long> {
             "LEFT JOIN FETCH p.notes " +
             "WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Perfume> findByNameContaining(@Param("query") String query);
+
+    //찜한 향수 리스트 조회
+    @Query("SELECT DISTINCT p FROM Perfume p " +
+            "LEFT JOIN FETCH p.keywords k " +  // keywords 정보 함께 조회
+            "JOIN p.favorites f " +            // 찜한 향수만 필터링
+            "WHERE f.id IS NOT NULL")
+    List<Perfume> findAllByFavorites();
 }

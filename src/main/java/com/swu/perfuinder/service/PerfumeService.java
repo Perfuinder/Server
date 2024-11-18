@@ -214,4 +214,15 @@ public class PerfumeService {
             return true;
         }
     }
+
+    // 찜한 향수 리스트 조회
+    @Transactional(readOnly = true)
+    public List<PerfumeResponse.FavoritePerfume> getFavoritePerfumes() {
+        // 찜한 향수 목록 조회
+        List<Perfume> favoritePerfumes = perfumeRepository.findAllByFavorites();
+
+        return favoritePerfumes.stream()
+                .map(perfumeConverter::toFavoritePerfume)
+                .collect(Collectors.toList());
+    }
 }

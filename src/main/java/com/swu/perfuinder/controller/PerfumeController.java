@@ -165,4 +165,16 @@ public class PerfumeController {
                 perfumeService.toggleFavorite(perfumeId.longValue())
         );
     }
+
+    @GetMapping("/favorites")
+    @Operation(
+            summary = "찜한 향수 목록 조회 API",
+            description = "사용자가 찜한 향수 목록을 조회합니다."
+    )
+    public ApiResponse<List<PerfumeResponse.FavoritePerfume>> getFavoritePerfumes() {
+        return ApiResponse.success(
+                "찜한 향수 목록 조회 성공",
+                perfumeService.getFavoritePerfumes()
+        );
+    }
 }

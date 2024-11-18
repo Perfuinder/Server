@@ -100,4 +100,15 @@ public class PerfumeConverter {
                 .build();
     }
 
+    // 찜한 향수 DTO로
+    public PerfumeResponse.FavoritePerfume toFavoritePerfume(Perfume perfume) {
+        return PerfumeResponse.FavoritePerfume.builder()
+                .perfumeId(perfume.getId())
+                .brand(perfume.getBrand())
+                .perfumeName(perfume.getName())
+                .imageUrl(perfume.getImageUrl())
+                .keywords(keywordConverter.toKeywordStringResponse(perfume.getKeywords()))
+                .perfumeDesc(perfume.getDescription())
+                .build();
+    }
 }
