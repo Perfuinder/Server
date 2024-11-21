@@ -27,7 +27,8 @@ public enum ErrorCode {
 
     // gemini
     GEMINI_API_ERROR(503, "G001", "Gemini API 호출 중 오류가 발생했습니다."),
-    IMAGE_NOT_FOUND(500, "G002", "이미지에서 키워드를 추출할 수 없습니다.");
+    IMAGE_NOT_FOUND(500, "G002", "이미지에서 키워드를 추출할 수 없습니다."),
+    FILE_SIZE_EXCEED(400, "G001", "파일 크기가 너무 큽니다. 최대 20MB까지 업로드 가능합니다.");
 
     private final int status;
     private final String code;

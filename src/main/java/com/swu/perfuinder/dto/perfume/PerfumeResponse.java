@@ -51,7 +51,7 @@ public class PerfumeResponse {
     }
 
     @Getter
-    @Schema(title = "PERFUME_RES_03 : Gemini 검색 결과 추천 향수 5종 응답 DTO")
+    @Schema(title = "PERFUME_RES_03-1 : Gemini 검색 결과 추천 향수 5종 응답 DTO")
     @Builder
     public static class GeminiPerfumeRes {
         @Schema(description = "향수 ID", example = "0")
@@ -75,6 +75,15 @@ public class PerfumeResponse {
         @Schema(description = "찜 여부", example = "false")
         private boolean isFavorite;
     }
+
+    @Getter
+    @Schema(title = "PERFUME_RES_03-2 : Gemini 이미지 키워드 응답 DTO")
+    @Builder
+    public static class GeminiPerfumeKeywords {
+        @Schema(description = "키워드 목록", example = "[\"강렬함\", \"모던\", \"발랄한\"]")
+        private List<String> keywords;
+    }
+
 
     @Getter
     @Schema(title = "PERFUME_RES_04 : 향수 상세 정보 응답 DTO")

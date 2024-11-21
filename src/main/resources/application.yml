@@ -1,6 +1,10 @@
 server:
   port: 8080
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   application:
     name: perfuinder
   datasource:
@@ -11,6 +15,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
     show-sql: false
     properties:
       hibernate:
@@ -19,7 +24,6 @@ spring:
 google:
   gemini:
     api-key: ${GEMINI_API_KEY}
-
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -32,15 +36,8 @@ springdoc:
   show-actuator: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
-
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
-
   jackson:
     time-zone: Asia/Seoul
-
 logging:
   level:
     root: INFO
