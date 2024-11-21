@@ -38,6 +38,7 @@ public class GeminiService {
     ) {
         // Gemini API 호출하여 추천받기
         String recommendation = geminiClient.getRecommendation(request);
+
         // 추천 결과 파싱하여 향수 정보 조회
         List<Perfume> recommendedPerfumes = parseAndFindPerfumes(recommendation);
 
@@ -48,8 +49,12 @@ public class GeminiService {
         // 가격 범위 필터링
         List<Perfume> filteredPerfumes = filterByPriceRange(recommendedPerfumes, request);
 
+        if (filteredPerfumes.isEmpty()) {
+            throw new CustomException(ErrorCode.NO_PERFUME_IN_PRICE_RANGE);
+        }
+
         // 찜하기 상태와 함께 응답 DTO 변환
-        return recommendedPerfumes.stream()
+        return filteredPerfumes.stream()  // recommendedPerfumes -> filteredPerfumes로 변경
                 .map(perfume -> perfumeConverter.toGeminiPerfumeResponse(
                         perfume, favoriteRepository.existsByPerfumeId(perfume.getId())
                 ))
@@ -103,35 +108,36 @@ public class GeminiService {
         return results;
     }
 
-    // 가격 필터링
+    // 가격 필터링 개선
     private List<Perfume> filterByPriceRange(List<Perfume> perfumes, PerfumeRequest.GeminiPerfumeReq request) {
         int priceRangeCode = request.getPriceRangeCode();
 
         if (priceRangeCode == 0) {
             return perfumes; // 전체 가격 범위
-        } else if (priceRangeCode == 6) {
-            int minPrice = request.getCustomPriceRangeMin();
-            int maxPrice = request.getCustomPriceRangeMax();
-            return perfumes.stream()
-                    .filter(perfume -> hasVolumeInPriceRange(perfume, minPrice, maxPrice))
-                    .collect(Collectors.toList());
-        } else {
-            int[][] priceRanges = {
-                    {0, 50000}, // 5만원 이하
-                    {50000, 100000}, // 5-10만원
-                    {100000, 200000}, // 10-20만원
-                    {200000, 300000}, // 20-30만원
-                    {300000, Integer.MAX_VALUE} // 30만원 이상
-            };
-
-            int[] selectedRange = priceRanges[priceRangeCode - 1];
-            int minPrice = selectedRange[0];
-            int maxPrice = selectedRange[1];
-
-            return perfumes.stream()
-                    .filter(perfume -> hasVolumeInPriceRange(perfume, minPrice, maxPrice))
-                    .collect(Collectors.toList());
         }
+
+        return perfumes.stream()
+                .filter(perfume -> isPerfumeInPriceRange(perfume, priceRangeCode,
+                        request.getCustomPriceRangeMin(), request.getCustomPriceRangeMax()))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isPerfumeInPriceRange(Perfume perfume, int priceRangeCode, Integer customMinPrice, Integer customMaxPrice) {
+        return perfume.getVolumes().stream()
+                .anyMatch(volume -> isPriceInRange(volume.getPrice(), priceRangeCode, customMinPrice, customMaxPrice));
+    }
+
+    private boolean isPriceInRange(int price, int priceRangeCode, Integer customMinPrice, Integer customMaxPrice) {
+        return switch (priceRangeCode) {
+            case 0 -> true;  // 전체
+            case 1 -> price <= 50000;  // 5만원 이하
+            case 2 -> price > 50000 && price <= 100000;  // 5-10만원
+            case 3 -> price > 100000 && price <= 200000;  // 10-20만원
+            case 4 -> price > 200000 && price <= 300000;  // 20-30만원
+            case 5 -> price > 300000;  // 30만원 이상
+            case 6 -> price >= customMinPrice && price <= customMaxPrice;  // 직접 입력
+            default -> throw new CustomException(ErrorCode.INVALID_PRICE_RANGE_CODE);
+        };
     }
 
     // 용량별 가격 정보 확인
