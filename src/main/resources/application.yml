@@ -23,7 +23,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 google:
   gemini:
-    api-key: AIzaSyDfZsLpKoJuZcn7xXYnzd5m3BIwn4xdbZ0 #${GEMINI_API_KEY}
+    api-key: ${GEMINI_API_KEY}
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
