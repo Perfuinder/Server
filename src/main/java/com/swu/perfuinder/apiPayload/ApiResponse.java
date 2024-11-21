@@ -1,5 +1,6 @@
 package com.swu.perfuinder.apiPayload;
 
+import com.swu.perfuinder.config.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,14 @@ public class ApiResponse<T> {
                 .status(200)
                 .message(message)
                 .data(data)
+                .build();
+    }
+    // 에러 응답 생성 메서드
+    public static <T> ApiResponse<T> error(ErrorCode errorCode) {
+        return ApiResponse.<T>builder()
+                .status(errorCode.getStatus())
+                .message(errorCode.getMessage())
+                .data(null)    // 에러 시에는 data를 null로
                 .build();
     }
 }

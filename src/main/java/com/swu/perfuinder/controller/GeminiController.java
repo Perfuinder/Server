@@ -38,13 +38,15 @@ public class GeminiController {
 
     @PostMapping(value = "/image/keywords", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Gemini 이미지 키워드 추출 API", description = "이미지의 키워드를 추출합니다.")
-    public List<String> extractKeywordsFromImage(@RequestParam("image") MultipartFile imageData)  {
-        List<String> keywords = new ArrayList<>();
-        try {
-            keywords = geminiService.extractKeywordsFromImage(imageData);
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
-        }
-        return keywords;
+    public ApiResponse<PerfumeResponse.GeminiPerfumeKeywords> extractKeywordsFromImage(@RequestParam("imageData") MultipartFile imageData)  {
+
+        List<String> keywords = geminiService.extractKeywordsFromImage(imageData);
+
+        return ApiResponse.success(
+                "키워드 추출 성공",
+                PerfumeResponse.GeminiPerfumeKeywords.builder()
+                        .keywords(keywords)
+                        .build()
+        );
     }
 }
