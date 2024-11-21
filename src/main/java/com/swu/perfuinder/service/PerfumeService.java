@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,10 +43,11 @@ public class PerfumeService {
     // 홈 화면 조회
     @Transactional(readOnly = true)
     public HomeResponse.HomeInfo getHomeInfo() {
-        Season randomSeason = getRandomSeason();
+        // Season randomSeason = getRandomSeason();
+        Season currentSeason = getCurrentSeason();  // 랜덤 계절 대신 현재 계절
         Brand randomBrand = getRandomBrand();
 
-        List<Perfume> seasonPerfumeList = perfumeRepository.findRandomBySeason(String.valueOf(randomSeason), 1);
+        List<Perfume> seasonPerfumeList = perfumeRepository.findRandomBySeason(String.valueOf(currentSeason), 1);  // 현재 계절로 조회
         if (seasonPerfumeList.isEmpty()) {
             throw new CustomException(ErrorCode.NO_PERFUME_IN_SEASON);
         }
@@ -71,13 +73,34 @@ public class PerfumeService {
     }
 
     // 랜덤 계절
-    private Season getRandomSeason() {
+//    private Season getRandomSeason() {
+//        try {
+//            Season[] seasons = Season.values();
+//            int randomIndex = (int) (Math.random() * seasons.length);
+//            return seasons[randomIndex];
+//        } catch (Exception e) {
+//            throw new CustomException(ErrorCode.SEASON_RANDOM_GENERATE_ERROR);
+//        }
+//    }
+
+    // 현재 계절
+    private Season getCurrentSeason() {
         try {
-            Season[] seasons = Season.values();
-            int randomIndex = (int) (Math.random() * seasons.length);
-            return seasons[randomIndex];
+            LocalDateTime now = LocalDateTime.now();
+            int month = now.getMonthValue();
+
+            // 월별 계절 매핑
+            if (month >= 3 && month <= 5) {
+                return Season.SPRING;
+            } else if (month >= 6 && month <= 8) {
+                return Season.SUMMER;
+            } else if (month >= 9 && month <= 11) {
+                return Season.FALL;
+            } else {
+                return Season.WINTER;  // 12, 1, 2월
+            }
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.SEASON_RANDOM_GENERATE_ERROR);
+            throw new CustomException(ErrorCode.SEASON_GENERATE_ERROR);
         }
     }
 

@@ -24,6 +24,9 @@ public enum ErrorCode {
     DUPLICATE_PERFUME_ID(400, "P010","중복된 향수 ID가 존재합니다."),
     INVALID_PERFUME_COUNT(400, "P011","향수 데이터의 수가 맞지 않습니다."),
 
+    // home
+    SEASON_GENERATE_ERROR(500, "H001", "현재 계절 생성 중 오류가 발생했습니다."),
+
 
     // gemini
     GEMINI_API_ERROR(503, "G001", "Gemini API 호출 중 오류가 발생했습니다."),
