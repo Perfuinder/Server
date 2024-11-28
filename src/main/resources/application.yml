@@ -40,5 +40,5 @@ springdoc:
     time-zone: Asia/Seoul
 logging:
   level:
-    root: INFO
+    root: INFO # test
     com.yourpackage.perfuinder: DEBUG
