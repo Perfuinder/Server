@@ -40,6 +40,7 @@ public class PerfumeService {
     private final KeywordConverter keywordConverter;
     private final BrandSearchConverter brandSearchConverter;
 
+
     // 홈 화면 조회
     @Transactional(readOnly = true)
     public HomeResponse.HomeInfo getHomeInfo() {

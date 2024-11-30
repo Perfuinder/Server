@@ -9,9 +9,9 @@ spring:
     name: perfuinder
   datasource:
     url: jdbc:mysql://localhost:3306/perfuinder?serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+    driverClassName: com.mysql.cj.jdbc.Driver
     username: perfuinder
     password: perfuinder123!
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: none
