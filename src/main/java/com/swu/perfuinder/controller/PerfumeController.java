@@ -95,9 +95,9 @@ public class PerfumeController {
             @PathVariable List<Integer> perfumeIds
     ) {
         // 크기 검증
-        if (perfumeIds.size() != 5) {
-            throw new CustomException(ErrorCode.INVALID_PERFUME_COUNT);
-        }
+//        if (perfumeIds.size() != 5) {
+//            throw new CustomException(ErrorCode.INVALID_PERFUME_COUNT);
+//        }
 
         List<Long> perfumeIdList = perfumeIds.stream()
                 .map(Long::valueOf)
