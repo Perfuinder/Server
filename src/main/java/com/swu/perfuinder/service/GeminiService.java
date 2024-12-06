@@ -5,6 +5,7 @@ import com.swu.perfuinder.config.exception.ErrorCode;
 import com.swu.perfuinder.converter.PerfumeConverter;
 import com.swu.perfuinder.domain.Perfume;
 import com.swu.perfuinder.domain.enums.Brand;
+import com.swu.perfuinder.domain.enums.Season;
 import com.swu.perfuinder.dto.perfume.PerfumeRequest;
 import com.swu.perfuinder.dto.perfume.PerfumeResponse;
 import com.swu.perfuinder.external.gemini.GeminiClient;
@@ -46,6 +47,12 @@ public class GeminiService {
             throw new CustomException(ErrorCode.NO_RECOMMENDED_PERFUME);
         }
 
+        // 계절 필터링
+        List<Perfume> seasonFiltered = filterBySeason(recommendedPerfumes, request.getSeasonCode());
+
+        if (seasonFiltered.isEmpty()) {
+            throw new CustomException(ErrorCode.NO_PERFUME_IN_SEASON_FOR_GEMINI);
+        }
         // 가격 범위 필터링
         List<Perfume> filteredPerfumes = filterByPriceRange(recommendedPerfumes, request);
 
@@ -60,7 +67,25 @@ public class GeminiService {
                 ))
                 .collect(Collectors.toList());
     }
-    
+    // 계절 필터링 메서드
+    // 추천 받은 메서드 중 해당 계절의 향수만 얻기
+    private List<Perfume> filterBySeason(List<Perfume> perfumes, int seasonCode) {
+        Season season = convertToSeason(seasonCode);
+        return perfumes.stream()
+                .filter(perfume -> perfume.getSeason() == season)
+                .collect(Collectors.toList());
+    }
+
+    private Season convertToSeason(int seasonCode) {
+        return switch (seasonCode) {
+            case 0 -> Season.SPRING;
+            case 1 -> Season.SUMMER;
+            case 2 -> Season.FALL;
+            case 3 -> Season.WINTER;
+            default -> throw new CustomException(ErrorCode.INVALID_SEASON_CODE);
+        };
+    }
+
     // 브랜드 명 변환
     private Brand convertBrand(String koreanBrand) {
         return switch (koreanBrand.trim()) {

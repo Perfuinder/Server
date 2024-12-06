@@ -32,7 +32,8 @@ public enum ErrorCode {
     GEMINI_API_ERROR(503, "G001", "Gemini API 호출 중 오류가 발생했습니다."),
     IMAGE_NOT_FOUND(500, "G002", "이미지에서 키워드를 추출할 수 없습니다."),
     NO_PERFUME_IN_PRICE_RANGE(400, "G003", "해당 가격대의 향수가 없습니다."),
-    FILE_SIZE_EXCEED(400, "G004", "파일 크기가 너무 큽니다. 최대 20MB까지 업로드 가능합니다.");
+    FILE_SIZE_EXCEED(400, "G004", "파일 크기가 너무 큽니다. 최대 20MB까지 업로드 가능합니다."),
+    NO_PERFUME_IN_SEASON_FOR_GEMINI(500, "G005", "추천받은 향수 중 해당 계절에 맞는 향수가 없습니다.");
 
     private final int status;
     private final String code;
